@@ -1,0 +1,72 @@
+- name: Install Jenkins
+  hosts: jenkins-servers
+  become: yes
+  gather_facts: true
+  tasks: 
+    - name: Update apt-get repo and cache
+      apt: 
+        update_cache: yes 
+        force_apt_get: yes
+    - name: Install list of packages
+      apt: name={{item}} state=present
+      with_items:
+        - wget
+        - curl
+        - git
+  vars:
+    jenkins_admin_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          33323333353264663836316239623131386137613666366233623663366430363435316364363439
+          6363333238613363623733663765373465323830643837330a386166373030336664353036386437
+          35303438653464333761633230636662653131626633346338363532303437666537353736313138
+          6138316535353831320a653439633161353535383561653765646466643038656235663662316535
+          6161
+  roles:
+    - role: geerlingguy.java
+      java_packages:
+        - openjdk-8-jdk
+    - role: geerlingguy.jenkins
+      jenkins_package_state: latest
+      jenkins_plugins_install_dependencies: true
+      jenkins_admin_password: "{{ jenkins_admin_pass }}"
+      jenkins_plugins:
+        - name: jackson2-api
+          version: "2.12.1"
+        - name: variant
+          version: "1.4"
+        - name: structs
+          version: "1.22"
+        - name: workflow-step-api
+          version: "2.23"
+        - name: credentials
+          version: "2.3.11"
+        - name: trilead-api
+          version: "1.0.13"
+        - name: ssh-credentials
+          version: "1.18.2"
+        - name: plain-credentials
+          version: "1.7"
+        - name: sshd
+          version: "3.0.3"    
+        - name: script-security
+          version: "1.76"
+        - name: command-launcher
+          version: "1.5"
+        - name: jdk-tool
+          version: "1.5"
+        - name: jaxb
+          version: "2.3.0.1"
+        - name: apache-httpcomponents-client-4-api
+          version: "4.5.13-1.0"
+        - name: credentials-binding
+          version: "1.24"
+        - name: aws-credentials
+          version: "1.28.1"
+        - name: aws-java-sdk
+          version: "1.11.976"
+        - name: scalable-amazon-ecs
+          version: "1.0"
+        - name: snakeyaml-api
+          version: "1.27.0"
+        - name: configuration-as-code
+          version: "1.47"
