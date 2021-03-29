@@ -1,3 +1,6 @@
 #Let's use an specific tag instead of mirroing.
 - name: ansible-role-java
   src: https://github.com/geerlingguy/ansible-role-java/archive/1.9.7.tar.gz
+
+- name: ansible-role-jenkins
+  src: https://github.com/geerlingguy/ansible-role-jenkins/archive/master.tar.gz
